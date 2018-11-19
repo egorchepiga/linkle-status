@@ -25,7 +25,7 @@ const app = express()
  * эту инфу дальше бродкастим по вебсокетам всем клиентам
  */
 app.use('*', (req, res, next) => {
-  websocketServer.broadcast(req.query)
+  websocketServer.broadcast(JSON.stringify(req.query))
 
   res.end()
 })
