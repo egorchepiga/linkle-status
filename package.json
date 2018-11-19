@@ -1,0 +1,15 @@
+{
+  "private": true,
+  "scripts": {
+    "lint": "eslint --ignore-path .eslintignore --ext .js .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "lcdi2c": "^1.0.6",
+    "ws": "^6.1.0"
+  },
+  "devDependencies": {
+    "eslint": "^5.9.0",
+    "pm2": "^3.2.2"
+  }
+}
