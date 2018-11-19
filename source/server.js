@@ -1,10 +1,6 @@
+const express = require('express')
 const WebSocket = require('ws')
-const http = require('http')
 
-/**
- * Нода будет сама торчать в Интернет
- * ufw будет настроен на допуск запросов только с моего домашнего роутера
- */
 const websocketServer = new WebSocket.Server({
   port: process.env.WS_PORT
 })
@@ -21,24 +17,23 @@ websocketServer.on('connection', function connection(ws) {
   ws.send('hi')
 })
 
+const app = express()
+
 /**
  * хттп-сервер слушает запросы о новых сокращенных ссылках
  * при новом запросе с ним вместе с телом приходит инфа
  * эту инфу дальше бродкастим по вебсокетам всем клиентам
  */
-const httpServer = http.createServer((request, response) => {
-  websocketServer.broadcast('_msg_')
-  response.end()
+app.use('*', (req, res, next) => {
+  websocketServer.broadcast(req.query)
+
+  res.end()
 })
 
 
 const hookPort = process.env.HOOK_PORT
 
-httpServer.listen(hookPort, err => {
-  if (err) {
-    return console.error('Something bad happened', err)
-  } else {
-
-    console.log(`HTTP server is listening on ${hookPort}`)
-  }
-})
+app.listen(hookPort)
+  .on('listening', () => {
+    console.log(`HTTP hook is listening on ${hookPort}`)
+  })
