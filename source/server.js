@@ -1,6 +1,8 @@
 const express = require('express')
 const WebSocket = require('ws')
 
+let lastData = null
+
 const websocketServer = new WebSocket.Server({
   port: process.env.WS_PORT
 })
@@ -15,6 +17,10 @@ websocketServer.broadcast = function broadcast(data) {
 
 websocketServer.on('connection', function connection(ws) {
   ws.send('hi')
+
+  setTimeout(() => {
+    ws.send(lastData)
+  }, 3000)
 })
 
 const app = express()
@@ -25,7 +31,8 @@ const app = express()
  * эту инфу дальше бродкастим по вебсокетам всем клиентам
  */
 app.use('*', (req, res, next) => {
-  websocketServer.broadcast(req.query.data)
+  lastData = req.query.data
+  websocketServer.broadcast(lastData)
 
   res.end()
 })
