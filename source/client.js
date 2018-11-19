@@ -21,6 +21,6 @@ ws.on('close', function close() {
 ws.on('message', data => {
   // вывести на экран нужную аналитику
   console.log(data)
-  // lcdConnection.println(`links: ${data.linkCount}`, 2);
+  lcdConnection.println(`${data}`, 2);
 })
 
