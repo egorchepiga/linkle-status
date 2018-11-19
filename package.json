@@ -1,9 +1,12 @@
 {
   "private": true,
   "scripts": {
-    "deploy:raspberry": "pm2 deploy raspberry",
-    "deploy:vps": "pm2 deploy vps",
+    "dev:server": "pm2 reload ecosystem.config.js --update-env --no-daemon --only url-shortener-status-server",
+    "dev:client": "pm2 reload ecosystem.config.js --update-env --no-daemon --only url-shortener-status-client",
+    "deploy:client": "pm2 deploy raspberry",
+    "deploy:server": "pm2 deploy vps",
     "lint": "eslint --ignore-path .eslintignore --ext .js .",
+    "pretest": "npm run lint",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
