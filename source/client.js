@@ -19,9 +19,12 @@ ws.on('close', function close() {
 })
 
 ws.on('message', data => {
-  data = JSON.parse(data)
-  // вывести на экран нужную аналитику
-  console.log(data)
-  lcdConnection.println(`links: ${data.link_count}`, 2);
+  try {
+    console.log(data)
+    data = JSON.parse(data)
+    lcdConnection.println(`links: ${data.link_count}`, 2);
+  } catch (e) {
+    console.error(data)
+  }
 })
 
