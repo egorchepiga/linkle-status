@@ -1,4 +1,4 @@
-// const I2CLCDConnection = require('lcdi2c');
+const I2CLCDConnection = require('lcdi2c');
 const WebSocket = require('ws')
 
 // todo: пояснить магические числа
@@ -9,6 +9,7 @@ const ws = new WebSocket(`ws://${process.env.WS_HOST}:${process.env.WS_PORT}`)
 
 ws.on('open', () => {
   // вывести на экран, что соединение установлено
+  lcdConnection.println('connected', 2);
   console.log('WebSocket connection established')
 })
 
