@@ -53,6 +53,7 @@ module.exports = {
     }
   ],
 
+  // todo: добавить в readme инфу о том, что нужен pm2 глобальный
   deploy: {
     vps: {
       user: 'adminus',
