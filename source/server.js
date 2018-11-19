@@ -1,14 +1,12 @@
 const WebSocket = require('ws')
 const http = require('http')
-const hookPort = 8813
-const wsPort = 9897 // todo: в переменных окружения
 
 /**
  * Нода будет сама торчать в Интернет
  * ufw будет настроен на допуск запросов только с моего домашнего роутера
  */
 const websocketServer = new WebSocket.Server({
-  port: wsPort
+  port: process.env.WS_PORT
 })
 
 websocketServer.broadcast = function broadcast(data) {
@@ -20,29 +18,25 @@ websocketServer.broadcast = function broadcast(data) {
 }
 
 websocketServer.on('connection', function connection(ws) {
-  ws.on('message', function incoming(message) {
-    console.log('received: %s', message)
-  })
-
-  ws.send('something')
+  ws.send('hi')
 })
 
-const requestHandler = (request, response) => {
-  websocketServer.broadcast('test')
-
-  response.end()
-}
-
-const httpServer = http.createServer(requestHandler)
 /**
  * хттп-сервер слушает запросы о новых сокращенных ссылках
  * при новом запросе с ним вместе с телом приходит инфа
  * эту инфу дальше бродкастим по вебсокетам всем клиентам
  */
+const httpServer = http.createServer((request, response) => {
+  websocketServer.broadcast('_msg_')
+  response.end()
+})
+
+
+const hookPort = process.env.HOOK_PORT
 
 httpServer.listen(hookPort, err => {
   if (err) {
-    return console.log('Something bad happened', err)
+    return console.error('Something bad happened', err)
   } else {
 
     console.log(`HTTP server is listening on ${hookPort}`)
