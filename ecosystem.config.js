@@ -14,11 +14,13 @@ module.exports = {
         NODE_ENV: 'development'
       },
       env_vps: {
+        watch: false,
         HOOK_PORT: 8813,
         WS_PORT: 9897,
         NODE_ENV: 'production'
       },
       env_raspberry: {
+        watch: false,
         HOOK_PORT: 8813,
         WS_PORT: 9897,
         NODE_ENV: 'production'
@@ -37,11 +39,13 @@ module.exports = {
         NODE_ENV: 'development'
       },
       env_vps: {
+        watch: false,
         WS_PORT: 9897,
         WS_HOST: '138.68.183.160',
         NODE_ENV: 'production'
       },
       env_raspberry: {
+        watch: false,
         WS_PORT: 9897,
         WS_HOST: '138.68.183.160',
         NODE_ENV: 'production'
