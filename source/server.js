@@ -1,13 +1,13 @@
 const WebSocket = require('ws')
 const hookPort = process.env.HOOK_PORT
 
-let latestCount = null
-
 const url = `mongodb://localhost:${process.env.MONGO_PORT}`
 
 require('mongodb').MongoClient
   .connect(url)
   .then(mongoConnection => {
+    let latestCount = null
+
     const httpServer = require('express')()
     const websocketServer = new WebSocket.Server({
       port: process.env.WS_PORT
