@@ -4,14 +4,14 @@ const hookPort = process.env.HOOK_PORT
 let latestCount = null
 
 // todo: такой порт монги на дэве только
-const url = `mongodb://localhost:${process.env.MONGO_PORT}`;
+const url = `mongodb://localhost:${process.env.MONGO_PORT}`
 
 require('mongodb').MongoClient
   .connect(url)
   .then(mongoConnection => {
     const server = require('express')()
 
-    server.use('*', (req, res, next) => {
+    server.use('*', (req, res) => {
       mongoConnection.db('url-shortener').collection('aliases')
         .countDocuments()
         .then(count => {
@@ -29,7 +29,7 @@ require('mongodb').MongoClient
         console.log(`HTTP server for hooks is listening on ${hookPort}`)
       })
   })
-  .catch(console.error);
+  .catch(console.error)
 
 const websocketServer = new WebSocket.Server({
   port: process.env.WS_PORT
