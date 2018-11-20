@@ -1,7 +1,35 @@
-const express = require('express')
 const WebSocket = require('ws')
+const hookPort = process.env.HOOK_PORT
 
-let lastData = null
+let latestCount = null
+
+// todo: такой порт монги на дэве только
+const url = `mongodb://localhost:${process.env.MONGO_PORT}`;
+
+require('mongodb').MongoClient
+  .connect(url)
+  .then(mongoConnection => {
+    const server = require('express')
+
+    server.use('*', (req, res, next) => {
+      mongoConnection.db('url-shortener').collection('aliases')
+        .countDocuments
+        .then(count => {
+          latestCount = count
+          console.log(count + 'доков всего сокращено')
+          websocketServer.broadcast(JSON.stringify({ link_count: count }))
+
+          res.end()
+        })
+        .catch(console.error)
+    })
+
+    server.listen(hookPort)
+      .on('listening', () => {
+        console.log(`HTTP server for hooks is listening on ${hookPort}`)
+      })
+  })
+  .catch(console.error);
 
 const websocketServer = new WebSocket.Server({
   port: process.env.WS_PORT
@@ -19,28 +47,6 @@ websocketServer.on('connection', function connection(ws) {
   ws.send('hi')
 
   setTimeout(() => {
-    ws.send(lastData)
+    ws.send(latestCount)
   }, 3000)
 })
-
-const app = express()
-
-/**
- * хттп-сервер слушает запросы о новых сокращенных ссылках
- * при новом запросе с ним вместе с телом приходит инфа
- * эту инфу дальше бродкастим по вебсокетам всем клиентам
- */
-app.use('*', (req, res, next) => {
-  lastData = req.query.data
-  websocketServer.broadcast(lastData)
-
-  res.end()
-})
-
-
-const hookPort = process.env.HOOK_PORT
-
-app.listen(hookPort)
-  .on('listening', () => {
-    console.log(`HTTP hook is listening on ${hookPort}`)
-  })
