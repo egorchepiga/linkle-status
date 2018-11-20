@@ -9,7 +9,7 @@ const url = `mongodb://localhost:${process.env.MONGO_PORT}`;
 require('mongodb').MongoClient
   .connect(url)
   .then(mongoConnection => {
-    const server = require('express')
+    const server = require('express')()
 
     server.use('*', (req, res, next) => {
       mongoConnection.db('url-shortener').collection('aliases')
