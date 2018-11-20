@@ -1,28 +1,37 @@
 const I2CLCDConnection = require('lcdi2c')
 const WebSocket = require('ws')
 
-// todo: пояснить магические числа
-const lcdConnection = new I2CLCDConnection(1, 0x3f, 16, 2)
+/**
+ * адрес, в консоли `i2cdetect 1` для обнаружения чипов I2C
+ */
+const I2C_ADDR = 0x3f
+
+/**
+ * устройство: 0 для старой ревизии, 1 для новой ревизии.
+ * адрес устройства I2C
+ * колонки: 16 или 20
+ * ряды: 2 или 4
+ */
+const lcdConnection = new I2CLCDConnection(1, I2C_ADDR, 16, 2)
 lcdConnection.println('short.taxnuke.ru', 1)
 
 const ws = new WebSocket(`ws://${process.env.WS_HOST}:${process.env.WS_PORT}`)
 
 ws.on('open', () => {
-  // вывести на экран, что соединение установлено
   lcdConnection.println('connected', 2)
-  console.log('WebSocket connection established')
+  console.info('WebSocket connection established')
 })
 
 ws.on('close', function close() {
-  // вывести на экран, что соединение разорвано (-лось?)
-  console.log('WebSocket connection closed')
+  console.warn('WebSocket connection closed')
+  lcdConnection.println('conn closed', 2)
 })
 
 ws.on('message', data => {
   try {
     console.log(data)
     data = JSON.parse(data)
-    lcdConnection.println(`links: ${data.link_count}`, 2)
+    lcdConnection.println(`links: ${data.link_count || 'Error =('}`, 2)
   } catch (e) {
     console.error(data)
   }

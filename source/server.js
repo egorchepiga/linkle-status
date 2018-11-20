@@ -3,50 +3,52 @@ const hookPort = process.env.HOOK_PORT
 
 let latestCount = null
 
-// todo: такой порт монги на дэве только
 const url = `mongodb://localhost:${process.env.MONGO_PORT}`
 
 require('mongodb').MongoClient
   .connect(url)
   .then(mongoConnection => {
-    const server = require('express')()
+    const httpServer = require('express')()
+    const websocketServer = new WebSocket.Server({
+      port: process.env.WS_PORT
+    })
 
-    server.use('*', (req, res) => {
+    websocketServer.broadcast = function broadcast(data) {
+      console.info(`broadcasting ${JSON.stringify(data)}...`)
+
+      websocketServer.clients.forEach(function each(client) {
+        if (client.readyState === WebSocket.OPEN) {
+          client.send(data)
+        }
+      })
+    }
+
+    websocketServer.on('connection', function connection(ws) {
+      ws.send('hi')
+
+      setTimeout(() => {
+        ws.send(latestCount)
+      }, 3000)
+    })
+
+    httpServer.use('*', (req, res) => {
       mongoConnection.db('url-shortener').collection('aliases')
         .countDocuments()
         .then(count => {
-          latestCount = count
-          console.log(count + 'доков всего сокращено')
-          websocketServer.broadcast(JSON.stringify({ link_count: count }))
-
           res.end()
+
+          websocketServer.broadcast(JSON.stringify({
+            link_count: count
+          }))
+
+          latestCount = count
         })
         .catch(console.error)
     })
 
-    server.listen(hookPort)
+    httpServer.listen(hookPort)
       .on('listening', () => {
-        console.log(`HTTP server for hooks is listening on ${hookPort}`)
+        console.log(`HTTP hooks server is listening on port ${hookPort}`)
       })
   })
   .catch(console.error)
-
-const websocketServer = new WebSocket.Server({
-  port: process.env.WS_PORT
-})
-
-websocketServer.broadcast = function broadcast(data) {
-  websocketServer.clients.forEach(function each(client) {
-    if (client.readyState === WebSocket.OPEN) {
-      client.send(data)
-    }
-  })
-}
-
-websocketServer.on('connection', function connection(ws) {
-  ws.send('hi')
-
-  setTimeout(() => {
-    ws.send(latestCount)
-  }, 3000)
-})
