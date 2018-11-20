@@ -30,11 +30,14 @@ ws.on('close', function close() {
 ws.on('message', data => {
   console.log(data)
 
+  lcdConnection.clear()
+
   try {
     data = JSON.parse(data)
   } catch (e) {
     console.error(data)
   } finally {
+    lcdConnection.println('short.taxnuke.ru', 1)
     lcdConnection.println(`links: ${data.link_count || 'Error =('}`, 2)
   }
 })
