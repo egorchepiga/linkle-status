@@ -13,7 +13,7 @@ require('mongodb').MongoClient
 
     server.use('*', (req, res, next) => {
       mongoConnection.db('url-shortener').collection('aliases')
-        .countDocuments
+        .countDocuments()
         .then(count => {
           latestCount = count
           console.log(count + 'доков всего сокращено')
