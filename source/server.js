@@ -6,7 +6,7 @@ const url = `mongodb://localhost:${process.env.MONGO_PORT}`
 require('mongodb').MongoClient
   .connect(url)
   .then(mongoConnection => {
-    let latestCount = null
+    let latestData = null
 
     const httpServer = require('express')()
     const websocketServer = new WebSocket.Server({
@@ -27,7 +27,7 @@ require('mongodb').MongoClient
       ws.send('hi')
 
       setTimeout(() => {
-        ws.send(latestCount)
+        ws.send(latestData)
       }, 3000)
     })
 
@@ -37,11 +37,13 @@ require('mongodb').MongoClient
         .then(count => {
           res.end()
 
-          websocketServer.broadcast(JSON.stringify({
+          const data = JSON.stringify({
             link_count: count
-          }))
+          })
 
-          latestCount = count
+          websocketServer.broadcast(data)
+
+          latestData = data
         })
         .catch(console.error)
     })

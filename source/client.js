@@ -28,12 +28,14 @@ ws.on('close', function close() {
 })
 
 ws.on('message', data => {
+  console.log(data)
+
   try {
-    console.log(data)
     data = JSON.parse(data)
-    lcdConnection.println(`links: ${data.link_count || 'Error =('}`, 2)
   } catch (e) {
     console.error(data)
+  } finally {
+    lcdConnection.println(`links: ${data.link_count || 'Error =('}`, 2)
   }
 })
 
