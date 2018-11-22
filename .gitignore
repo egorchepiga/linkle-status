@@ -1,3 +1,7 @@
+# LaTeX
+*.aux
+
+# IDEA
 .idea
 
 # Logs
