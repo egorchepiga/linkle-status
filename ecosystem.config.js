@@ -3,7 +3,7 @@ module.exports = {
   apps: [
     {
       /**
-       * СЕРВЕР
+       * SERVER
        */
       name: 'url-shortener-status-server',
       script: 'source/server.js',
@@ -24,7 +24,7 @@ module.exports = {
     },
     {
       /**
-       * КЛИЕНТ
+       * CLIENT
        */
       name: 'url-shortener-status-client',
       script: 'source/client.js',
@@ -43,7 +43,6 @@ module.exports = {
     }
   ],
 
-  // todo: добавить в readme инфу о том, что нужен pm2 глобальный
   deploy: {
     vps: {
       user: 'adminus',
@@ -55,7 +54,6 @@ module.exports = {
     },
     raspberry: {
       user: 'pi',
-      // задеплоить на Raspberry можно только с локалки, соответственно
       host: '192.168.1.70',
       ref: 'origin/master',
       repo: 'git@github.com:taxnuke/url-shortener-status.git',

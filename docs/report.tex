@@ -19,13 +19,12 @@
 \renewcommand{\thepart}{\arabic{part}}
 \renewcommand{\thesection}{\thepart.\arabic{section}}
 
-
 \begin{document}
     \input{parts/title.tex}
 
     \newpage
 
-    \section*{Формулировка задачи}
+    \section*{Постановка задачи}
         Разработать клиент-серверное приложение для вывода на внешний жидкокристаллический
         дисплей (с помощью Raspberry Pi) количества сокращенных ссылок из базы данных сервиса short.taxnuke.ru в режиме реального времени.
 
@@ -41,14 +40,29 @@
         \begin{figure}
             \includegraphics[width=\linewidth]{img/arch.jpg}
             \caption{Схема архитектуры крупным планом.}
-            \label{fig:bigarch}
+            \label{fig:big_arch}
         \end{figure}
 
-        На рисунке~\ref{fig:bigarch} изображена схема сервиса short.taxnuke.ru в целом, а также интегрированного в него
-        клиент-серверного приложения для отображения статистики.
+        На рисунке~\ref{fig:big_arch} изображена схема сервиса short.taxnuke.ru в целом, а также интегрированного в него
+        клиент-серверного приложения для отображения статистики (в пунктирной фиолетовой рамке).
+
+
 
     \section*{Результат работы}
-    \section*{Вывод}
+        В результате выполнения курсового проекта было разработано серверное и клиентское приложения,
+        работающие в паре и выполняющие поставленную задачу.
+
+    \newpage
+    \subsection*{ПРИЛОЖЕНИЕ 1. Код сервера}
+    \lstinputlisting{../source/server.js}
+
+    \newpage
+    \subsection*{ПРИЛОЖЕНИЕ 2. Код клиента}
+    \lstinputlisting{../source/client.js}
+
+    \newpage
+    \subsection*{ПРИЛОЖЕНИЕ 3. Содержимое конфигурационного файла для развертки}
+    \lstinputlisting{../ecosystem.config.js}
 
 
 \end{document}

@@ -50,7 +50,7 @@ require('mongodb').MongoClient
 
     httpServer.listen(hookPort)
       .on('listening', () => {
-        console.log(`HTTP hooks server is listening on port ${hookPort}`)
+        console.log(`HTTP server listening on port ${hookPort}`)
       })
   })
   .catch(console.error)
