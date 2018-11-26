@@ -1,18 +1,26 @@
 const WebSocket = require('ws')
 const hookPort = process.env.HOOK_PORT
 
+/**
+ * @1
+ */
 const url = `mongodb://localhost:${process.env.MONGO_PORT}`
-
 require('mongodb').MongoClient
   .connect(url)
   .then(mongoConnection => {
     let latestData = null
 
+    /**
+     * @2
+     */
     const httpServer = require('express')()
     const websocketServer = new WebSocket.Server({
       port: process.env.WS_PORT
     })
 
+    /**
+     * @3
+     */
     websocketServer.broadcast = function broadcast(data) {
       console.info(`broadcasting ${JSON.stringify(data)}...`)
 
@@ -23,6 +31,9 @@ require('mongodb').MongoClient
       })
     }
 
+    /**
+     * @4
+     */
     websocketServer.on('connection', function connection(ws) {
       ws.send('hi')
 
@@ -31,6 +42,9 @@ require('mongodb').MongoClient
       }, 3000)
     })
 
+    /**
+     * @5
+     */
     httpServer.use('*', (req, res) => {
       mongoConnection.db('url-shortener').collection('aliases')
         .countDocuments()
