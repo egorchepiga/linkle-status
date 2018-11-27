@@ -1,3 +1,6 @@
+/**
+ * @0
+ */
 const WebSocket = require('ws')
 const hookPort = process.env.HOOK_PORT
 
@@ -46,6 +49,10 @@ require('mongodb').MongoClient
      * @5
      */
     httpServer.use('*', (req, res) => {
+
+      /**
+       * @6
+       */
       mongoConnection.db('url-shortener').collection('aliases')
         .countDocuments()
         .then(count => {
@@ -62,6 +69,9 @@ require('mongodb').MongoClient
         .catch(console.error)
     })
 
+    /**
+     * @7
+     */
     httpServer.listen(hookPort)
       .on('listening', () => {
         console.log('proverka')
