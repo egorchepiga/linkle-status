@@ -1,8 +1,10 @@
 # LaTeX
 *.aux
-
-# IDEA
-.idea
+.DS_Store
+*.pdf
+*.fls
+*.gz
+*.fdb_latex*
 
 # Logs
 logs
