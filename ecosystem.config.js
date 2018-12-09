@@ -1,9 +1,9 @@
 module.exports = {
-  // Options reference: https://pm2.io/doc/en/runtime/reference/ecosystem-file/
+  // Справка опций: https://pm2.io/doc/en/runtime/reference/ecosystem-file/
   apps: [
     {
       /**
-       * SERVER
+       * Сервис-сервер
        */
       name: 'url-shortener-status-server',
       script: 'source/server.js',
@@ -24,7 +24,7 @@ module.exports = {
     },
     {
       /**
-       * CLIENT
+       * Сервис-клиент
        */
       name: 'url-shortener-status-client',
       script: 'source/client.js',
@@ -45,20 +45,24 @@ module.exports = {
 
   deploy: {
     vps: {
+      // конфигурация для развертывания (деплоя) сервера
       user: 'adminus',
       host: '138.68.183.160',
       ref: 'origin/master',
       repo: 'git@github.com:taxnuke/url-shortener-status.git',
       path: '/var/www/stat.short.taxnuke.ru',
-      'post-deploy': 'npm i && pm2 reload ecosystem.config.js --env vps --only url-shortener-status-server'
+      'post-deploy': 'npm i && pm2 reload ecosystem.config.js --env \
+      vps --only url-shortener-status-server'
     },
     raspberry: {
+      // конфигурация для развертывания (деплоя) клиента
       user: 'pi',
       host: '192.168.1.70',
       ref: 'origin/master',
       repo: 'git@github.com:taxnuke/url-shortener-status.git',
       path: '/var/www/stat.short.taxnuke.ru',
-      'post-deploy': 'npm i && pm2 reload ecosystem.config.js --env raspberry --only url-shortener-status-client'
+      'post-deploy': 'npm i && pm2 reload ecosystem.config.js --env \
+      raspberry --only url-shortener-status-client'
     }
   }
 }

@@ -1,5 +1,6 @@
 # LaTeX
 *.aux
+_minted*
 .DS_Store
 *.pdf
 *.fls
